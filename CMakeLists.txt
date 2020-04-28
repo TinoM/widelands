@@ -307,7 +307,7 @@ wl_add_flag(WL_COMPILE_DIAGNOSTICS "-Werror=uninitialized")
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   # Only tested on Linux. Might work also on other platforms.
   # If tested and found good, remove this check
-  if (CMAKE_SYSTEM MATCHES "Linux")
+  if (CMAKE_SYSTEM MATCHES "Linux" OR CMAKE_SYSTEM MATCHES "Windows")
     # Usage of -flto tested only with gcc 8.3 and 9.3 (2020-04); when in doubt, leaving it out..
     if(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0))
       #
@@ -320,8 +320,9 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
       # If using lto, it needs to happen both during compile and link, else no benefits.
       wl_add_flag(WL_GENERIC_CXX_FLAGS "-flto")
       SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -flto")
+	  message (STATUS "Enabling link-time optimizations")
     endif()
-  endif(CMAKE_SYSTEM MATCHES "Linux")
+  endif(CMAKE_SYSTEM MATCHES "Linux" OR CMAKE_SYSTEM MATCHES "Windows")
 endif(CMAKE_BUILD_TYPE STREQUAL "Release")
 
 IF (WIN32)
